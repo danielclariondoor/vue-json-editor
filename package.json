@@ -1,7 +1,7 @@
 {
-  "name": "vue-json-editor",
-  "version": "1.4.0",
-  "description": "A json editor of vue",
+  "name": "vue-json-editor-clariodoor",
+  "version": "1.0",
+  "description": "A json editor of vue, forked from dirkliu/vue-json-editor",
   "main": "vue-json-editor.vue",
   "scripts": {
     "dev": "webpack-dev-server",
