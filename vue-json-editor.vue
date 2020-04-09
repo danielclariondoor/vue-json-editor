@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="json-editor-container">
         <div class="jsoneditor-vue"></div>
         <div class="jsoneditor-btns" v-if="showBtns!==false">
             <button
@@ -129,7 +129,7 @@
 </script>
 
 <style scoped>
-    .ace_line_group {
+    >>> .ace_line_group {
         text-align: left;
     }
     .json-editor-container {
@@ -146,10 +146,10 @@
         text-align: center;
         margin-top:10px;
     }
-    .jsoneditor-vue .jsoneditor-outer{
+    >>> .jsoneditor-vue .jsoneditor-outer{
         min-height:150px;
     }
-    .jsoneditor-vue div.jsoneditor-tree{
+    >>> .jsoneditor-vue div.jsoneditor-tree{
         min-height: 350px;
     }
     .json-save-btn{
