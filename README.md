@@ -1,4 +1,4 @@
-# vue-json-editor
+# vue-json-editor-cd
 
 A json editor of vue.js
 
@@ -18,7 +18,7 @@ v-model：bind the [json object]
 ## 1. Install using npm
 
 ```
-npm install danielclariondoor/vue-json-editor --save
+npm install danielclariondoor/vue-json-editor-cd --save
 ```
 
 ## 2. Use vue-json-editor in the vue component
