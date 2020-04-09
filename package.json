@@ -1,6 +1,6 @@
 {
   "name": "vue-json-editor-cd",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A json editor of vue, forked from dirkliu/vue-json-editor",
   "main": "vue-json-editor.vue",
   "scripts": {
