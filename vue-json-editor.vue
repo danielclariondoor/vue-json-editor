@@ -146,7 +146,7 @@
     }
 
     >>> .jsoneditor-vue .jsoneditor-outer {
-        min-height: 150px;
+        min-height: 200px;
     }
 
     >>> .jsoneditor-vue div.jsoneditor-tree {
