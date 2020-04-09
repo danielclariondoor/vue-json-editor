@@ -136,6 +136,10 @@
         width: 100%;
     }
 
+    .jsoneditor-vue {
+        width: 100%;
+    }
+
     .jsoneditor-btns {
         text-align: center;
         margin-top: 10px;
