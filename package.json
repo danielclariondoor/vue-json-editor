@@ -4,6 +4,7 @@
   "description": "A json editor of vue, forked from dirkliu/vue-json-editor",
   "main": "vue-json-editor.vue",
   "scripts": {
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
