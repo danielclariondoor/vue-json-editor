@@ -619,9 +619,10 @@
            * Validate schema
            * @param {Object} schema schema to validate
            * @param {Boolean} throwOrLogError pass true to throw (or log) an error if invalid
-           * @return {Boolean} true if schema is valid dispaly
+           * @return {Boolean} true if schema is valid
            */
           function validateSchema (schema, throwOrLogError) {
+            console.log(schema)
             var $schema = schema.$schema || self._opts.defaultMeta || defaultMeta()
             var currentUriFormat = self._formats.uri
             self._formats.uri = typeof currentUriFormat == 'function'
@@ -11138,6 +11139,7 @@
             lexer.rules = [/^(?:\s+)/, /^(?:(-?([0-9]|[1-9][0-9]+))(\.[0-9]+)?([eE][-+]?[0-9]+)?\b)/, /^(?:"(?:\\[\\"bfnrt/]|\\u[a-fA-F0-9]{4}|[^\\\0-\x09\x0a-\x1f"])*")/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:,)/, /^(?::)/, /^(?:true\b)/, /^(?:false\b)/, /^(?:null\b)/, /^(?:$)/, /^(?:.)/]
             lexer.conditions = {"INITIAL": {"rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "inclusive": true}}
 
+
             return lexer
           })()
           parser.lexer = lexer
@@ -13234,11 +13236,7 @@
         Node.prototype._updateDomField = function () {
           var domField = this.dom.field
           if (domField) {
-            this._updateFieldSchema()
-            if (this.parentEnum) {
-              let select = document.createElement('select')
-            }
-            // make background color lightgray when empty
+            // make backgound color lightgray when empty
             var isEmpty = (String(this.field) == '' && this.parent.type != 'array')
             if (isEmpty) {
               util.addClassName(domField, 'jsoneditor-empty')
@@ -13795,12 +13793,6 @@
           // apply field to DOM
           var domField = this.dom.field
           if (domField) {
-            console.log(domField)
-            this._updateFieldSchema()
-            if (this.parentEnum) {
-              console.log(this.parentEnum)
-              let select = document.createElement('select')
-            }
             if (this.fieldEditable) {
               // parent is an object
               domField.contentEditable = this.editable.field
@@ -13872,55 +13864,15 @@
          * @private
          */
         Node.prototype._updateSchema = function () {
+          console.log(this.editor.options.schema)
           //Locating the schema of the node and checking for any enum type
           if (this.editor && this.editor.options) {
             // find the part of the json schema matching this nodes path
-            let path = this.getPath()
-            this.schema = Node._findSchema(this.editor.options.schema, path)
-            if (this.parent && (this.parent.field === 'group' || this.parent.field === 'array')) {
-              this.isA = this.parent.field
-              if (this.isA && this.schema[this.isA]) {
-                this.enum = Object.keys(this.schema[this.isA].properties)
-              } else {
-                this.enum = Node._findEnum(this.schema)
-              }
+            this.schema = Node._findSchema(this.editor.options.schema, this.getPath())
+            if (this.schema) {
+              this.enum = Node._findEnum(this.schema)
             } else {
               delete this.enum
-            }
-          }
-        }
-
-        /**
-         * Locate the JSON schema of the node and check for any enum type
-         * @private
-         */
-        Node.prototype._updateFieldSchema = function () {
-          if (!this.parent && this.childs && this.childs.length) this.isA = 'group' // this is the top level node, which is affectively a group
-          else if (!this.parent || !this.parent.parent || !this.parent.parent.field || this.parent.parent.field === 'group' || this.parent.parent.field === 'array') {
-            // this is either a field, a group, or an array. figure out which by checking its children
-            this.isA = 'field'
-            if (this.childs) for (var child of this.childs) {
-              if (child.field === 'group' || child.field === 'array') {
-                this.isA = child.field
-                break
-              }
-            }
-          }
-          //Locating the schema of the node and checking for any enum type
-          if (this.editor && this.editor.options) {
-            // find the part of the json schema matching this node's path
-            let path = this.getPath()
-            delete path[path.length - 1]
-            this.schema = Node._findParentSchema(this.editor.options.schema, path)
-            if (this.parent && (this.parent.field === 'group' || this.parent.field === 'array')) {
-              // this.isA = this.parent.field
-              if (this.isA && this.schema[this.isA]) {
-                this.parentEnum = Object.keys(this.schema[this.isA].properties)
-              } else {
-                this.parentEnum = Node._findEnum(this.schema)
-              }
-            } else {
-              delete this.parentEnum
             }
           }
         }
@@ -13960,52 +13912,16 @@
         Node._findSchema = function (schema, path) {
           var childSchema = schema
 
-          let parentIs = null
-          // if parent = group, array, this is a group, array, or field
-          if (path[path.length - 2] === 'group' || path[path.length - 2] === 'array') {
-            parentIs = path[path.length - 2]
-            childSchema = schema.properties
-          } else {
-            for (var i = 0; i < path.length && childSchema; i++) {
-              var key = path[i]
-              if (typeof key === 'string' && childSchema.properties) {
-                childSchema = childSchema.properties[key] || null
-              } else if (typeof key === 'number' && childSchema.items) {
-                childSchema = childSchema.items
-              }
+          for (var i = 0; i < path.length && childSchema; i++) {
+            var key = path[i]
+            if (typeof key === 'string' && childSchema.properties) {
+              childSchema = childSchema.properties[key] || null
+            } else if (typeof key === 'number' && childSchema.items) {
+              childSchema = childSchema.items
             }
           }
 
           return childSchema
-        }
-
-        /**
-         * Return the part of a JSON schema matching given path.
-         * @param {Object} schema
-         * @param {Array.<string | number>} path
-         * @return {Object | null}
-         * @private
-         */
-        Node._findParentSchema = function (schema, path) {
-          var parentSchema = schema
-
-          let parentIs = null
-          // if parent = group, array, this is a group, array, or field
-          if (path[path.length - 2] === 'group' || path[path.length - 2] === 'array') {
-            parentIs = path[path.length - 2]
-            parentSchema = schema.properties
-          } else {
-            for (var i = 0; i < path.length && parentSchema; i++) {
-              var key = path[i]
-              if (typeof key === 'string' && parentSchema.properties) {
-                parentSchema = parentSchema.properties[key] || null
-              } else if (typeof key === 'number' && parentSchema.items) {
-                parentSchema = parentSchema.items
-              }
-            }
-          }
-
-          return parentSchema
         }
 
         /**
@@ -14071,6 +13987,14 @@
           }
 
           return domValue
+        }
+
+        /**
+         * Create an editable value
+         * @private
+         */
+        Node.prototype._getSchemaOptions = function () {
+          return true
         }
 
         /**
@@ -36554,6 +36478,5 @@
 
         /***/
       }
-      /******/
-    ])
+      /******/])
 })
