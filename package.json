@@ -1,16 +1,13 @@
 {
-  "name": "vue-json-editor-clariodoor",
-  "version": "1.0",
+  "name": "vue-json-editor-cd",
+  "version": "1.0.0",
   "description": "A json editor of vue, forked from dirkliu/vue-json-editor",
   "main": "vue-json-editor.vue",
   "scripts": {
-    "dev": "webpack-dev-server",
-    "build": "rimraf dist && webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dirkliu/vue-json-editor.git"
+    "url": "git+https://github.com/danielclariondoor/vue-json-editor.git"
   },
   "keywords": [
     "vue-json-editor",
@@ -21,21 +18,7 @@
     "eidtor",
     "vue"
   ],
-  "author": "liuqi41",
-  "contributors": [
-    "Stefano Valenzano <valenzano.stefano99@gmail.com> (https://tuttarealstep.github.io/)",
-    "Duncan Lock (https://github.com/dflock)",
-    "Jean-Pierre (https://github.com/jpbecotte)",
-    "tianzhihen (https://github.com/tianzhihen)",
-    "alexmgillis (https://github.com/alexmgillis)",
-    "DrCoc (https://github.com/DrCoc)",
-    "Aymeric Hermant (https://github.com/ahermant/)"
-  ],
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dirkliu/vue-json-editor/issues"
-  },
-  "homepage": "https://github.com/dirkliu/vue-json-editor#readme",
   "dependencies": {
     "vue": "^2.2.6"
   },
